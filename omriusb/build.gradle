@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 2
+        versionName "1.0"
+		externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+    buildTypes {
+        release {
+            jniDebuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            externalNativeBuild {
+                cmake {
+                    cppFlags -= "-DDEBUGOUTPUT"
+                }
+            }
+        }
+        debug {
+            jniDebuggable true
+            externalNativeBuild {
+                cmake {
+                    cppFlags += "-DDEBUGOUTPUT"
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+	externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'de.irt.hradio:dabaudiodecoderplugininterface:1.0.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.7.3'
+
+    implementation 'eu.hradio.core:radiodns:1.1.2'
+    implementation 'eu.hradio.core:platformsearch:1.0.3'
+}
